@@ -11,8 +11,12 @@ app.use(express.urlencoded({extended: true}))
 //cookie middleware
 app.use(cookieParser())
 
-const userRouter = require('./routes/userRoutes')
+import userRouter from './routes/userRoutes'
+import bookRouter from './routes/bookRoutes'
+import orderRouter from './routes/orderRoutes'
 app.use('/api', userRouter)
+app.use('/api', bookRouter )
+app.use('/api', orderRouter )
 
 
 app.get('/', function (req:any, res:any) {

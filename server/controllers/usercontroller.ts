@@ -8,7 +8,7 @@ import cookieToken from '../utils/cookieToken'
 // user signup
 
 
-exports.signup = async(req:any, res:any, next:any) => {
+export const signup = async(req:any, res:any, next:any) => {
     try {
         const {name, email,address, password} =  req.body
         //check
@@ -18,12 +18,12 @@ exports.signup = async(req:any, res:any, next:any) => {
 
         const user = await prisma.user.create({
             data: {
-              name,
-              email,
-              password,
-              address,
+                name,
+                email,
+                password,
+                address,
             },
-          });
+        });
 
         //send user a token
         cookieToken(user, res)
@@ -37,7 +37,7 @@ exports.signup = async(req:any, res:any, next:any) => {
 
 // login user
 
-exports.login = async(req: Request, res: Response, next: NextFunction) => {
+export const login = async(req: Request, res: Response, next: NextFunction) => {
     try {
         //take info from user
         const {email, password} = req.body
@@ -72,7 +72,7 @@ exports.login = async(req: Request, res: Response, next: NextFunction) => {
 }
 
 // logout user
-exports.logout = async(req: Request, res: Response, next: NextFunction) => {
+export const logout = async(req: Request, res: Response, next: NextFunction) => {
     try {
         res.clearCookie('token');
         res.json({
