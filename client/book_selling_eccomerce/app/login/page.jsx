@@ -1,6 +1,58 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
+import { useLoginMutation } from '../services/authApi';
+import { useRouter } from 'next/navigation';
+import { useFormik } from 'formik';
+import { loginSchema } from '../schemas';
+
+
 
 const Login = () => {
+    const [login, { isLoading, error }] = useLoginMutation();
+    const router = useRouter()
+    // const [credentials, setCredentials] = useState({
+    //     email: '',
+    //     password: '',
+    // })
+    const [credentials, setCredentials] = useState({
+        email: "prakadsh@prakash.com",
+        password: "prakash123"
+    })
+    const onSubmit = async (values, actions) => {
+        try {
+            console.log('vale', values)
+            const result = await login(values).unwrap();
+            // Save the token as a cookie
+            document.cookie = `token=${JSON.stringify(result)}; path=/`;
+            // console.log('jwt result: ' , result);
+            // const user_id = result.user.user_id
+            // toast("Welcome " + values.username);
+            // // console.log('disptach')
+            // dispatch(setUser({ "username": values.username, "user_id": user_id }))
+            // localStorage.setItem('token', JSON.stringify({ ...result.token, "user": values.username, "user_id": user_id }));
+
+            // redirect to dashboard or do something else
+            router.push('/');
+        } catch (error) {
+            // toast.error('error: ' + error.data.non_field_errors);
+            console.error(error);
+        }
+    };
+
+    const {
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+    } = useFormik({
+        initialValues:credentials,
+        validationSchema: loginSchema,
+        onSubmit,
+    });
+    
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +69,7 @@ const Login = () => {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" action="#" onSubmit={handleSubmit} method="POST">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address
@@ -26,11 +78,20 @@ const Login = () => {
                                 <input
                                     id="email"
                                     name="email"
-                                    type="email"
+                                    // type=    "email"
+                                    // value={credentials.email}
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    // onChange={(e) => {
+                                    //     setCredentials({ ...credentials, email: e.target.value });
+                                    // }} 
                                     autoComplete="email"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className={errors.email && touched.email ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}
                                 />
+                                {errors.email && touched.email && <p className="text-red-500">{errors.email}</p>}
+
                             </div>
                         </div>
 
@@ -49,11 +110,21 @@ const Login = () => {
                                 <input
                                     id="password"
                                     name="password"
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                     type="password"
                                     autoComplete="current-password"
+                                    // value={credentials.password}
+                                    // onChange={(e) => {
+                                    //     setCredentials({ ...credentials, password: e.target.value });
+                                    // }}
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                    className={!errors.password && !touched.password ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}                                />
+                                                        {errors.password && touched.password && (
+                            <p className="text-red-500">{errors.password}</p>
+                        )}
                             </div>
                         </div>
 

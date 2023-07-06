@@ -1,7 +1,32 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { useFormik } from 'formik';
 import React from 'react'
 
 const Signup = () => {
+
+    const {
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+    } = useFormik({
+        initialValues: {
+            name: '',
+            address: '',
+            email: '',
+            password: '',
+            password2: '',
+            // image: ''
+
+        },
+        validationSchema: signupSchema,
+        onSubmit,
+    });
+
   return (
     // "name":"prakash",
     // "email":"dfsfsh@prakash.com",
