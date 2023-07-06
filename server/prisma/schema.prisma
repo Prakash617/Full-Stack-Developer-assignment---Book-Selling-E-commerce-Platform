@@ -31,31 +31,32 @@ model Book {
   stock       Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  orders      Order[]
+  // orders      Order[]
+  quantities OrderQuantity[]
 }
-
-// model OrderQuantity {
-//   id         Int      @id @default(autoincrement())
-//   orderId    Int
-//   bookId     Int
-//   quantity   Int
-//   subtotal   Float
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @updatedAt
-//   order      Order    @relation(fields: [orderId], references: [id])
-//   book       Book     @relation(fields: [bookId], references: [id])
-// }
-
 
 model Order {
   id         Int      @id @default(autoincrement())
   userId     Int
-  bookId     Int
-  quantity   Int
+  // bookId     Int
+  // quantity   Int
   total      Float
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id])
+  // book       Book     @relation(fields: [bookId], references: [id])
+  quantities OrderQuantity[]
+}
+
+model OrderQuantity {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  bookId     Int
+  quantity   Int
+  subtotal   Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  order      Order    @relation(fields: [orderId], references: [id])
   book       Book     @relation(fields: [bookId], references: [id])
 }
 

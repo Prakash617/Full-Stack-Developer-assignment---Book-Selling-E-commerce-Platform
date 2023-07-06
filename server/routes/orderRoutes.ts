@@ -1,5 +1,5 @@
 import express from 'express'
-import { createOrder } from '../controllers/ordercontroller'
+import { createOrder, getOrder } from '../controllers/ordercontroller'
 import isLoggedIn from '../middlewares/isLoggedIn'
 
 
@@ -8,11 +8,11 @@ const router = express.Router()
 
 router.route('/order/create').post(isLoggedIn,  createOrder)
 
-// router.route('/book/update/:id').put(isLoggedIn,  updatePost)
+// router.route('/order/update/:id').put(isLoggedIn,  updateOrder)
 
-// router.route('/book/delete/:id').delete(isLoggedIn,  deletePost)
+// router.route('/order/delete/:id').delete(isLoggedIn,  deleteOrder)
 
-// router.route('/books/get').get( getBooks)
+router.route('/orders/get').get( getOrder)
 
 
 export default router

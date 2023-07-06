@@ -22,43 +22,53 @@ export const createBook = async (req:any, res:any, next:any) => {
     }
 }
 
-//update an existing post
+//update an existing book
 
-// export const updatePost = async (req:any, res:any, next:any) => {
-//     const {id} = req.params;
-//     const {title, body} = req.body
+export const updateBook = async (req:any, res:any, next:any) => {
+    const {id} = req.params;
+    const {title, description,author,price,stock} = req.body
+    // title       String
+    // description String
+    // author      String
+    // price       Float
+    // stock
 
-//     try {
-//         const result = await prisma.post.update({
-//             where: {id: id},
-//             data: {
-//                 title: title,
-//                 body: body
-//             }
-//         });
-//         res.json(result)
-//     } catch (error) {
-//         res.json({error: `Post with ${id} does not exists`})
-//     }
-// }
+    try {
+        const result = await prisma.book.update({
+            where: {id: parseInt(id)},
+            data: {
+                title,
+                description,
+                author,
+                price,
+                stock
+            }
+        });
+        res.json(result)
+    } catch (error) {
+        res.json({error: `Post with ${id} does not exists`})
+    }
+}
 
-//delete a post
+//delete a book
 
-// export const deletePost = async (req:any, res:any, next:any) => {
-//     const {id} = req.params
+export const deleteBook = async (req:any, res:any, next:any) => {
+    const { id } = req.params
+    // console.log('id: ' , id)
 
-//     try {
+    try {
         
-//         const result = await prisma.post.delete({
-//             where: {id: id}
-//         });
-//         res.json(result)
+        const result = await prisma.book.delete({
+            where: {id: parseInt(id)}
+        });
+        res.json(result)
 
-//     } catch (error) {
-//         res.json({error: `Post with ${id} does not exists`})
+    } catch (error:any) {
+        console.log('error: ' , error)
+        res.json({error: `Book with ${id} does not exists`})
         
-//     }
-// }
+    }
+}
 
 //get all post
 

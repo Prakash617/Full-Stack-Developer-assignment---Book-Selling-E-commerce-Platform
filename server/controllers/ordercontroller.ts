@@ -4,27 +4,47 @@ import prisma from "../prisma";
 
 export const createOrder = async (req:any, res:any, next:any) => {
     try {
-        const { userId, bookId, quantity, total } = req.body;
+        const { userId,orderQuantities } = req.body;
         // console.log('i am in',userId)
 
         // Check for missing fields
-        if (!userId || !bookId || !quantity || !total) {
+        if (!userId || !orderQuantities || orderQuantities.length === 0 ) {
             throw new Error('Please provide all fields');
         }
-
+        let total:number = 0
+        const formattedOrderQuantities = orderQuantities.map((quantity:any) => {
+            const { bookId, quantity: quantityValue, subtotal } = quantity;
+            total += subtotal
+            return {
+              bookId,
+              quantity: quantityValue,
+              subtotal,
+            };
+          });
+          console.log('total price:',total);
          // Ensure userId is a number
     // const userIdNumber = parseInt(userId);
        //validation on you
-        const result = await prisma.order.create({
+       const order = await prisma.order.create({
         data: {
-            userId,
-            bookId,
-            quantity,
-            total,
-        }
-    });
+          userId: parseInt(userId),
+          total: total,
+          quantities: {
+            create: formattedOrderQuantities,
+          },
+        },
+        include: {
+          quantities: {
+            include: {
+              book: true,
+            },
+          },
+          user: true,
+        },
+      });
+  
     // res.json(result)
-    res.status(201).json({ result });
+    res.status(201).json({ order });
     } catch (error:any) {
         throw new Error(error)
     }
@@ -70,11 +90,11 @@ export const createOrder = async (req:any, res:any, next:any) => {
 
 //get all post
 
-// export const getOrder = async (req:any, res:any, next:any) => {
-//     try {
-//         const result  = await prisma.book.findMany()
-//         res.json(result)
-//     } catch (error) {
-//         res.json({error: `NO post was found`})
-//     }
-// }
+export const getOrder = async (req:any, res:any, next:any) => {
+    try {
+        const result  = await prisma.order.findMany()
+        res.json(result)
+    } catch (error) {
+        res.json({error: `NO post was found`})
+    }
+}
