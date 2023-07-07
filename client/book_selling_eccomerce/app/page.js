@@ -3,17 +3,59 @@
 import Link from "next/link";
 import Navbar from "./components/Navbar";
 import { useGetBooksQuery } from "./services/bookApi";
+import Loading from "./components/Loading";
 
 export default function Home() {
 
   const { data:products, error, isLoading , isSuccess} = useGetBooksQuery();
   if (isLoading) {
-    return <div>loding---</div>
+    return <Loading/>
   }
   if (isSuccess) {
     
     console.log('data', products);
   }
+//   const products =[
+//     {
+//         "id": 1,
+//         "title": "prakash",
+//         "description": "something about ramayanFam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+//         "author": "prakash update",
+//         "price": 323,
+//         "image": "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg",
+//         "ISBN": 0,
+//         "availability": false,
+//         "stock": 4,
+//         "createdAt": "2023-07-05T13:37:38.453Z",
+//         "updatedAt": "2023-07-06T04:17:13.117Z"
+//     },
+//     {
+//         "id": 2,
+//         "title": "mahabarath",
+//         "description": "something about ramayan",
+//         "author": "ram",
+//         "price": 323,
+//         "image": "https://www.whitmorerarebooks.com/pictures/medium/2465.jpg",
+//         "ISBN": 0,
+//         "availability": false,
+//         "stock": 3,
+//         "createdAt": "2023-07-05T13:38:04.368Z",
+//         "updatedAt": "2023-07-05T13:38:04.368Z"
+//     },
+//     {
+//         "id": 4,
+//         "title": "prakash",
+//         "description": "something about ramayanFam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+//         "author": "prakash update",
+//         "price": 323,
+//         "image": "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg",
+//         "ISBN": 0,
+//         "availability": false,
+//         "stock": 4,
+//         "createdAt": "2023-07-07T08:37:30.787Z",
+//         "updatedAt": "2023-07-07T08:37:30.787Z"
+//     }
+// ]
 
   return (
     <>

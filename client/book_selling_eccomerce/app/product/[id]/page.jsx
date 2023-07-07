@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGetBookByIdQuery } from '@/app/services/bookApi'
 import { addItem } from '@/app/store/slices/orderSlice';
 import { toast } from 'react-toastify';
+import Loading from '@/app/components/Loading';
 
 // const product = {
 //     name: 'Basic Tee 6-Pack ',
@@ -53,7 +54,7 @@ export default function Book({ params:{id} }) {
     // const [selectedSize, setSelectedSize] = useState(product.sizes[2])
     const { data: book, error, isLoading, isSuccess } = useGetBookByIdQuery(id);
     if (isLoading) {
-        return <div>loading ..</div>
+        return <Loading/>
     }
     console.log('data', book,)
     const handleAddToCart = () => {
