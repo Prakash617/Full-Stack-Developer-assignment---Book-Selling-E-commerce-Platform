@@ -13,7 +13,8 @@ export const signup = async(req:any, res:any, next:any) => {
         const {name, email,address, password} =  req.body
         //check
         if (!name || !email || !password) {
-            throw new Error('please provide all fields')
+            // throw new Error('please provide all fields')
+            res.status(500).json({ error:'please provide all fields'});
         }
 
         const user = await prisma.user.create({
@@ -27,9 +28,12 @@ export const signup = async(req:any, res:any, next:any) => {
 
         //send user a token
         cookieToken(user, res)
+        // res.json(user)
 
     } catch (error:any) {
-        throw new Error(error)
+        res.status(500).json({ error:"email already exits" });
+
+        // throw new Error(error)
     }
 }
 
@@ -41,6 +45,7 @@ export const login = async(req: Request, res: Response, next: NextFunction) => {
     try {
         //take info from user
         const {email, password} = req.body
+        console.log('email', email,'password', password)
 
         if (!email || !password) {
             throw new Error('Please provide email and password')
@@ -59,14 +64,18 @@ export const login = async(req: Request, res: Response, next: NextFunction) => {
 
         //password mismatch
         if (user.password !== password) {
+            // res.status(500).json({ error: "email or password doesn't match" });
             throw new Error('password is incorrect')
         }
 
         //user is there and validation
         cookieToken(user, res)
+        
 
     } catch (error:any) {
-        throw new Error(error)
+        res.status(500).json({ error: "email or password doesn't match" });
+
+        // throw new Error(error)
     }
 
 }

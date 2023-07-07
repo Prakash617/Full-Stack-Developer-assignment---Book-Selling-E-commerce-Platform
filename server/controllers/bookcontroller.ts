@@ -75,8 +75,25 @@ export const deleteBook = async (req:any, res:any, next:any) => {
 export const getBooks = async (req:any, res:any, next:any) => {
     try {
         const result  = await prisma.book.findMany()
+        console.log('book found',result)
         res.json(result)
     } catch (error) {
-        res.json({error: `NO post was found`})
+        res.json({error: `NO book was found`})
+    }
+}
+
+export const getBookById = async (req:any, res:any, next:any) => {
+    const { id } = req.params
+    try {
+        const result  = await prisma.book.findUnique({
+            where:{
+                id:parseInt(id)
+            }
+        }
+        )
+        res.json(result)
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({error: `NO post was found`})
     }
 }

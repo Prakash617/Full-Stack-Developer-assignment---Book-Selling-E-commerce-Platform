@@ -10,10 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
   password  String
   name      String
   address   String
@@ -23,40 +22,42 @@ model User {
 }
 
 model Book {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String
-  author      String
-  price       Float
-  stock       Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id           Int             @id @default(autoincrement())
+  title        String
+  description  String
+  author       String
+  price        Float
+  image        String          @default("https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg")
+  ISBN         Int             @default(0)
+  availability Boolean         @default(false)
+  stock        Int
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   // orders      Order[]
-  quantities OrderQuantity[]
+  quantities   OrderQuantity[]
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
+  id         Int             @id @default(autoincrement())
   userId     Int
   // bookId     Int
   // quantity   Int
   total      Float
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  user       User            @relation(fields: [userId], references: [id])
   // book       Book     @relation(fields: [bookId], references: [id])
   quantities OrderQuantity[]
 }
 
 model OrderQuantity {
-  id         Int      @id @default(autoincrement())
-  orderId    Int
-  bookId     Int
-  quantity   Int
-  subtotal   Float
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  order      Order    @relation(fields: [orderId], references: [id])
-  book       Book     @relation(fields: [bookId], references: [id])
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  bookId    Int
+  quantity  Int
+  subtotal  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  book      Book     @relation(fields: [bookId], references: [id])
 }
-

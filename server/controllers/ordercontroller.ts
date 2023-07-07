@@ -92,7 +92,11 @@ export const createOrder = async (req:any, res:any, next:any) => {
 
 export const getOrder = async (req:any, res:any, next:any) => {
     try {
-        const result  = await prisma.order.findMany()
+      const result = await prisma.order.findMany({
+        include: {
+          quantities: true,
+        },
+      });
         res.json(result)
     } catch (error) {
         res.json({error: `NO post was found`})
