@@ -16,6 +16,15 @@ export const bookApi = createApi({
       query: (id) => `/books/get/${id}`,
       method: 'GET'
     }),
+    order: builder.mutation({
+      query: (credentials) => {
+        // console.log("cre",credentials)
+        return{
+          url: 'order/create/',
+          method: 'POST',
+          body: credentials
+      }},
+  }),
   }),
 })
 
@@ -24,4 +33,5 @@ export const bookApi = createApi({
 export const { 
   useGetBooksQuery,
   useGetBookByIdQuery,
+  useOrderMutation
  } = bookApi

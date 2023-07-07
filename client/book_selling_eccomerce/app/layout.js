@@ -2,6 +2,8 @@ import Navbar from './components/Navbar'
 import './globals.css'
 import { Inter } from 'next/font/google'
 import ReduxProvider from './store/ReduxProvider'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +19,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <ReduxProvider>
           <Navbar />
+          <ToastContainer />
           {children}
         </ReduxProvider>
       </body>

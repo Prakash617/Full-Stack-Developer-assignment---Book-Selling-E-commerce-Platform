@@ -4,6 +4,7 @@ import { authApi } from '../services/authApi';
 import { bookApi } from '../services/bookApi';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import  userReducer from './slices/userSlice';
+import  orderReducer from './slices/orderSlice';
 // import commentReducer from './slices/commentSlices';
 
 const store = configureStore({
@@ -11,7 +12,7 @@ const store = configureStore({
     // [post_api.reducerPath]: post_api.reducer,
     [bookApi.reducerPath]: bookApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-    // auth: authReducer,
+    order: orderReducer,
     userSlice: userReducer,
   },
   middleware: (getDefaultMiddleware) =>

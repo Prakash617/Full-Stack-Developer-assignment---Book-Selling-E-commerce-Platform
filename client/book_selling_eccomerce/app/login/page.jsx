@@ -4,6 +4,7 @@ import { useLoginMutation } from '../services/authApi';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import { loginSchema } from '../schemas';
+import { toast } from 'react-toastify';
 
 
 
@@ -20,8 +21,10 @@ const Login = () => {
     })
     const onSubmit = async (values, actions) => {
         try {
-            console.log('vale', values)
             const result = await login(values).unwrap();
+            console.log('login', result)
+            // console.log('vale', values)
+            toast.success("Welcome " +result.user.name);
             // Save the token as a cookie
             document.cookie = `token=${JSON.stringify(result)}; path=/`;
             // console.log('jwt result: ' , result);
@@ -35,6 +38,8 @@ const Login = () => {
             router.push('/');
         } catch (error) {
             // toast.error('error: ' + error.data.non_field_errors);
+            toast.error("Error " + 'password or email does not match');
+
             console.error(error);
         }
     };
@@ -69,7 +74,7 @@ const Login = () => {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" onSubmit={handleSubmit} method="POST">
+                    <form className="space-y-6"  onSubmit={handleSubmit} method="POST">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address

@@ -1,8 +1,31 @@
+'use client'
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { useFormik } from 'formik';
 import React from 'react'
+import { signupSchema } from '../schemas';
+import { useSignupMutation } from '../services/authApi';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+
 
 const Signup = () => {
+
+    const [signup, { isLoading, error }] = useSignupMutation();
+    const router = useRouter()
+
+    const onSubmit = async (values, actions) => {
+        try {
+            const result = await signup(values).unwrap();
+            toast.success("Signup " +'successfully');
+            console.log('result: ', result)
+            // Save the token as a cookie
+            document.cookie = `token=${JSON.stringify(result)}; path=/`;
+            router.push('/');
+        } catch (error) {
+            toast.error('error: ' + "user already exists");
+            console.error(error);
+        }
+    };
 
     const {
         values,
@@ -15,11 +38,11 @@ const Signup = () => {
         setFieldValue,
     } = useFormik({
         initialValues: {
-            name: '',
-            address: '',
-            email: '',
-            password: '',
-            password2: '',
+            name: 'anu',
+            address: 'dfsd',
+            email: 'prakashths@gmail.com',
+            password: 'Ramro@617',
+            confirmPassword: 'Ramro@617',
             // image: ''
 
         },
@@ -47,21 +70,25 @@ const Signup = () => {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={handleSubmit} method="POST">
                         <div>
-                            <label htmlFor="fullname" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                                 Full Name
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="email"
-                                    name="fullname"
+                                    id="text" 
+                                    name="name"
                                     type="text"
+                                    value={values.name}
+                                    onChange={handleChange}
                                     // autoComplete="email"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                    // required
+                                    className={errors.address && touched.address ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}/>             
                             </div>
+                            {errors.address && touched.address && <p className="text-red-500">{errors.address}</p>}
+
                         </div>
                         <div>
                             <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
@@ -74,9 +101,13 @@ const Signup = () => {
                                     type="text"
                                     // autoComplete="email"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                    value={values.address}
+                                    onChange={handleChange}
+                                    className={errors.address && touched.address ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}/>             
                             </div>
+                            {errors.address && touched.address && <p className="text-red-500">{errors.address}</p>}
+
                         </div>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -87,11 +118,15 @@ const Signup = () => {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    autoComplete="email"
+                                    // autoComplete="email"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    className={errors.email && touched.email ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}/>
                             </div>
+                            {errors.email && touched.email && <p className="text-red-500">{errors.email}</p>}
+
                         </div>
 
                         <div>
@@ -110,11 +145,40 @@ const Signup = () => {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    autoComplete="current-password"
+                                    // autoComplete="current-password"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    className={errors.password && touched.password ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}/>
                             </div>
+                            {errors.password && touched.password && <p className="text-red-500">{errors.password}</p>}
+
+                        </div>
+                        <div>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Confirm Password
+                                </label>
+                                {/* <div className="text-sm">
+                                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                                        Forgot password?
+                                    </a>
+                                </div> */}
+                            </div>
+                            <div className="mt-2">
+                                <input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    required
+                                    value={values.confirmPassword}
+                                    onChange={handleChange}
+                                    className={errors.confirmPassword && touched.confirmPassword ?"block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                                    "block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-red-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"}/>
+                            </div>
+                            {errors.confirmPassword && touched.confirmPassword && <p className="text-red-500">{errors.confirmPassword}</p>}
+
                         </div>
 
                         <div>

@@ -14,17 +14,19 @@ export const authApi = createApi({
                 method: 'POST',
                 body: credentials
             }),
-            // transformResponse: (response) => {
-            //     // console.log('at least one response', response)
-            //     // const { token } = response;
-            //     // const decoded_token = jwt_decode(token.access);
-            //     // // Store the token in local storage
-            //     // localStorage.setItem('token', JSON.stringify(token));
-            //     // const data = { token: token, user: decoded_token, user_id: decoded_token.user }
-        
-            //     return response;
-            //   }
         }),
+        signup: builder.mutation({
+
+            query: (credentials) => {
+                return {
+                    url: 'signup/',
+                    method: 'POST',
+                    body: credentials,
+                }
+            },
+        }),
+
+
     })
 })
 
@@ -34,4 +36,4 @@ export const {
     useLoginMutation,
     useLogoutMutation,
     useSignupMutation
- } = authApi
+} = authApi
